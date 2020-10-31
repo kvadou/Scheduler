@@ -20,15 +20,6 @@ textarea{
   border-bottom: 10px solid black;
 }
 
-.description{
-  white-space: pre-wrap;
-}
-
-.time-block{
-  text-align: center;
-  border-radius: 15px;
-}
-
 .row {
   white-space: pre-wrap;
   height: 80px;
@@ -96,7 +87,7 @@ td {
   width: 5%;
 }
 
-#title-date, #title-time {
+#title-time {
     margin: 0;
 }
 

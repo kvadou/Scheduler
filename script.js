@@ -1,17 +1,19 @@
-var scheduleArr = [];
-var scheduleObj = {};
-var dateArr = [];
-var dateObj = {};
-var storedSchedule;
-var savedSchedule;
-var date = moment().format('LL');
+/* defining variables */
+let scheduleArr = [];
+let scheduleObj = {};
+let dateArr = [];
+let dateObj = {};
+let storedSchedule;
+let savedSchedule;
+let date = moment().format('LL');
 previous = 0;
 next = 0;
 day = 0;
 
+/* using jQuery to make sure the page is ready to execute JavaScript code */
 $(document).ready(function() {
   init();
-
+/* setting up functions with open brackets to pass through the values */
   function init() {
     storeTodaysDate();
     changeDay();
@@ -21,7 +23,7 @@ $(document).ready(function() {
     saveEvent();
     clearSchedule();
   }
-
+/* function to determine the current date and store it in local storage */
   function storeTodaysDate() {
     savedSchedule = JSON.parse(localStorage.getItem(date));
 
@@ -32,9 +34,9 @@ $(document).ready(function() {
       localStorage.setItem(date, JSON.stringify(dateArr));
     }
   }
-
+/* function to determine any other date and store it to local storage */
   function storeDifferentDate() {
-    var existingStorage = JSON.parse(localStorage.getItem(date));
+    let existingStorage = JSON.parse(localStorage.getItem(date));
 
     if (existingStorage !== null) {
       scheduleArr = existingStorage;
@@ -46,11 +48,11 @@ $(document).ready(function() {
       localStorage.setItem(date, JSON.stringify(currentDateArr));
     }
   }
-
+/* function to determine current local time, day & years and dynamically update the HTML */
   function updateTime(differentDate) {
     if (differentDate !== date) {
-      var currentDate = moment().format('dddd, MMMM Do');
-      var currentYear = moment().format('YYYY');
+      let currentDate = moment().format('dddd, MMMM Do');
+      let currentYear = moment().format('YYYY');
       $('#currentDay').html(currentDate);
       $('#title-year').html(currentYear);
       dynamicTime();
@@ -63,7 +65,7 @@ $(document).ready(function() {
       );
       $('#dynamic-time').hide();
 
-      var dayOfYear = moment().dayOfYear();
+      let dayOfYear = moment().dayOfYear();
       if (dayOfYear + day === 0) {
         currentYear = previousDate.format('YYYY');
         $('#title-year').html(currentYear);
@@ -86,17 +88,17 @@ $(document).ready(function() {
       dynamicTime();
     }
   }
-
+/* function to dynamically update the current time into hours, minutes & seconds, set interval to 1000 milliseconds or 1 second */
   function dynamicTime() {
-    var currentTime = moment().format('HH:mm:ss');
+    let currentTime = moment().format('HH:mm:ss');
     $('#dynamic-time').text(currentTime);
     setInterval(dynamicTime, 1000);
   }
-
+/* function to highlight the current block of time in the calendar so user knows what time it is */
   function scheduleFocus() {
-    var currentHourInt = parseInt(moment().format('HH'));
+    let currentHourInt = parseInt(moment().format('HH'));
 
-    var timeIDs = $('#schedule-table tr[id]')
+    let timeIDs = $('#schedule-table tr[id]')
       .map(function() {
         return this.id;
       })
@@ -107,8 +109,8 @@ $(document).ready(function() {
     } else if (day > 0) {
       $('.input-area').css('background-color', '#77dd77');
     } else {
-      for (var i = 0; i < timeIDs.length; i++) {
-        var timeIDsInt = parseInt(timeIDs[i]);
+      for (let i = 0; i < timeIDs.length; i++) {
+        let timeIDsInt = parseInt(timeIDs[i]);
         if (timeIDsInt < currentHourInt) {
           $('#' + timeIDs[i])
             .find('textarea')
@@ -124,9 +126,8 @@ $(document).ready(function() {
         }
       }
     }
-    // setInterval(scheduleFocus, 1000);
   }
-
+/* function will allow the user to clear the schedule and wipe out any saved events */
   function clearSchedule() {
     $('#clear-button').on('click', function() {
       scheduleObj = {};
@@ -140,20 +141,20 @@ $(document).ready(function() {
       localStorage.setItem(date, JSON.stringify(scheduleArr));
     });
   }
-
+/* function will display the current days schedule on the page for user to view */
   function displaySchedule() {
     savedSchedule = JSON.parse(localStorage.getItem(date));
     $('.input-area').val('');
-    for (var i = 0; i < savedSchedule.length; i++) {
-      var getKey = Object.keys(savedSchedule[i]);
-      var getValue = Object.values(savedSchedule[i]);
+    for (let i = 0; i < savedSchedule.length; i++) {
+      let getKey = Object.keys(savedSchedule[i]);
+      let getValue = Object.values(savedSchedule[i]);
       $('#area-' + getKey).val(getValue[0]);
     }
   }
-
+/* this function will allow the user to toggle to the previous, current or next day and dynamically update the page to reflect the correct day */
   function changeDay() {
     $('nav').on('click', function(e) {
-      var dayButtonID = e.target.id;
+      let dayButtonID = e.target.id;
 
       if (dayButtonID === 'previous-day') {
         day--;
@@ -191,9 +192,9 @@ $(document).ready(function() {
       }
     });
   }
-
+/* this function will allow the user to toggle to the active page or Today, so they know what is currently on their schedule for today. */
   function changeActive(page) {
-    var activeClass = $('#change-div>nav>ul>li.active');
+    let activeClass = $('#change-div>nav>ul>li.active');
 
     scheduleArr.length = 0;
     activeClass.removeClass('active');
@@ -202,12 +203,13 @@ $(document).ready(function() {
       .addClass('active');
   }
 
+  /* this function will allow the user to save the new calendar event they input in the text box, this data will persist after a browser refresh, saved in local storage */
   function saveEvent() {
     $('.save-button').on('click', function() {
-      var trId = $(this)
+      let trId = $(this)
         .closest('tr')
         .attr('id');
-      var textAreaVal = $(this)
+      let textAreaVal = $(this)
         .closest('tr')
         .find('textarea')
         .val()
@@ -220,7 +222,7 @@ $(document).ready(function() {
       scheduleArr.push(scheduleObj);
       localStorage.setItem(date, JSON.stringify(scheduleArr));
 
-      for (var i = 0; i < storedSchedule.length; i++) {
+      for (let i = 0; i < storedSchedule.length; i++) {
         if (storedSchedule[i].hasOwnProperty(trId)) {
           storedSchedule[i][trId] = textAreaVal;
           scheduleArr = storedSchedule;
