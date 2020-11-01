@@ -1,4 +1,6 @@
-/* defining variables */
+/* referenced https://github.com/twopcz/Work-Day-Planner to get ideas on how to complete this project */
+
+/* defining variables with open brackets to pass through values*/
 let scheduleArr = [];
 let scheduleObj = {};
 let dateArr = [];
